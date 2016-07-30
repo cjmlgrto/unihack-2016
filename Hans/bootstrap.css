@@ -1,96 +1,119 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
-html,body{
+html,
+body {
     font-family: Open Sans;
     padding: 0;
     margin: 0;
     width: 100%;
     overflow-x: hidden;
 }
-#sidebar{
-    height:100%;
+
+#sidebar {
+    height: 100%;
     position: fixed;
-    left:0;
-    background-color: rgba(30,30,30,0.3);
+    left: 0;
+    background-color: rgba(30, 30, 30, 0.3);
     width: 20vw;
     z-index: 998;
     overflow-y: scroll;
 }
-#sidebar-items{
+
+#sidebar-items {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
-#sidebar-items li{
+
+#sidebar-items li {
     padding: 0;
 }
-.avatar{
-    border: 1px solid rgba(0,0,0,0.1);
+
+.avatar {
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
-.avatar:hover{
-    background-color: rgba(0,0,0,0.2);
+
+.avatar:hover {
+    background-color: rgba(0, 0, 0, 0.2);
     transition: background-color 0.2s;
     -moz-transition: background-color 0.2s;
     -webkit-transition: background-color 0.2s;
-    cursor: pointer; cursor: hand;
+    cursor: pointer;
+    cursor: hand;
 }
-.avatar img, .add img{
+
+.avatar img,
+.add img {
     width: 4vw;
     vertical-align: middle;
     margin: 1em;
     margin-bottom: 0.1em;
-    margin-top:0.1em;
+    margin-top: 0.1em;
 }
-.avatar p{
+
+.avatar p {
     font-size: 1.5vw;
 }
-.add img:hover{
-    cursor: pointer; cursor: hand;
+
+.add img:hover {
+    cursor: pointer;
+    cursor: hand;
 }
-.add img:hover{
+
+.add img:hover {
     opacity: 0.5;
     transition: opacity 0.2s;
     -moz-transition: opacity 0.2s;
     -webkit-transition: opacity 0.2s;
 }
-#main{
+
+#main {
     padding-left: 20vw;
 }
-#logo-make{
+
+#logo-make {
     text-align: center;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     z-index: 999;
 }
-#logo-make img{
+
+#logo-make img {
     width: 10vw;
     padding-top: 1em;
     padding-bottom: 1em;
 }
-.key{
+
+.key {
     text-align: center;
 }
-.key p{
+
+.key p {
     font-size: 1.5vw;
-    color: rgba(255,255,255,0.8);
-    background-color: rgba(0,0,0,0.1);
-    border: 1px solid rgba(0,0,0,0.1); 
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 0.5em;
     margin: 0;
 }
-#calendar{
+
+.calendar {
     margin: 10vh;
     margin-right: 15vw;
     margin-left: 15vw;
 }
-.fc-scroller{
+
+.fc-scroller {
     height: auto!important;
     overflow-y: hidden!important;
 }
-.fc-row{
+
+.fc-row {
     height: auto!important;
 }
-.clearfix{
-    clear:both;
+
+.clearfix {
+    clear: both;
 }
+
 .fc {
     direction: ltr;
     text-align: left;

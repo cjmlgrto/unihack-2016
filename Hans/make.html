@@ -11,28 +11,38 @@
     <script src='fullcalendar.js'></script>
     <script>
         var n = 0;
-        calendar = []; //full list of events in user's calendar as json objects (start, end, id)
+        calendar1 = []; //full list of events in user's calendar as json objects (start, end, id)
         calendar2 = [];
         var n = 0; //counter to generate unique id for each event
 
         $(document).ready(function () {
-            $('#calendar').fullCalendar({
+            $('#calendar1').fullCalendar({
                 customButtons: {
                     shareButton: {
                         text: 'Share',
-                        click: function() {
+                        click: function () {
                             alert('Added to Group');
                         }
                     },
                     clearButton: {
                         text: 'Clear',
-                        click: function() {
-                            $('#calendar').fullCalendar('removeEvents');
+                        click: function () {
+                            $('#calendar1').fullCalendar('removeEvents');
+                        },
+
+                        overlayButton: {
+                            text: 'overlay',
+                            click: function () {
+                                $('#calendar2').css({
+                                    'position': 'absolute',
+                                    'top': '10vh'
+                                });
+                            }
                         }
                     }
                 },
                 header: {
-                    left: '',
+                    left: 'overlayButton',
                     center: '',
                     right: 'clearButton, shareButton'
                 },
@@ -47,8 +57,8 @@
                         end: end, //end time
                         id: n //unique event id (order in which events are created starting on index 0)
                     };
-                    $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    $('#calendar').fullCalendar('unselect');
+                    $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    $('#calendar1').fullCalendar('unselect');
                     calendar.push(eventData); //append user's calendar list with latest event data
                     n++;
                 },
@@ -58,7 +68,7 @@
 
                 //Deletes events on click
                 eventClick: function (eventData, jsEvent, view) {
-                    $('#calendar').fullCalendar('removeEvents', function (events) {
+                    $('#calendar1').fullCalendar('removeEvents', function (events) {
                         for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
                             if (eventData.id == calendar[i].id) {
                                 calendar.splice(i, 1);
@@ -68,26 +78,8 @@
                     });
                 },
             });
+
             $('#calendar2').fullCalendar({
-                customButtons: {
-                    shareButton: {
-                        text: 'Share',
-                        click: function() {
-                            alert('Added to Group');
-                        }
-                    },
-                    clearButton: {
-                        text: 'Clear',
-                        click: function() {
-                            $('#calendar').fullCalendar('removeEvents');
-                        }
-                    }
-                },
-                header: {
-                    left: '',
-                    center: '',
-                    right: 'clearButton, shareButton'
-                },
                 selectable: true,
                 selectHelper: true,
 
@@ -149,15 +141,19 @@
         </ul>
     </div>
     <div id='main'>
-        <div id='calendar'>
+        <div id='calendar1' class='calendar'>
+        </div>
+        <br>
+        <br> Second calendar here
+        <div id='calendar2' class='calendar'>
         </div>
     </div>
 
     <script>
-        $(function(){
+        $(function () {
             $('#sidebar')
         });
     </script>
 </body>
 
-</html> 
+</html>
