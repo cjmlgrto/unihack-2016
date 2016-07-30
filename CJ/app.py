@@ -91,7 +91,7 @@ def create_event(username):
 	return redirect(url)
 
 @app.route('/user/<username>/delete_event/<start>', methods=['POST'])
-def create_event(username):
+def delete_event(username):
 	url = '/user/' + username
 	return redirect(url)
 
@@ -109,11 +109,38 @@ def group(group_code):
 
 @app.route('/group/<group_code>/add_user', methods=['POST'])
 def add_user(group_code):
-	pass
+	username = request.form['username']
+
+	users = Group.query.filter_by(group_code=group_code).first()
+	userids = [i.User.id for i in users]
+
+	# Check to see if the user exists
+	userid = User.query.filter_by(name=username).first()
+	url = '/group/<group_code>'
+	if userid is None:
+		# The person they are trying to add does not exist
+		return redirect(url)
+	else:
+		if userid in userids:
+			return redirect(url)
+			# The person is already in the group
+		else:
+			#Add to the group
+			new_user = Group(group_code, userid)
+			db.session.add(new_user)
+			db.session.commit()
+			return redirect(url)
 
 @app.route('/group/<group_code>/remove_user/<username>')
 def remove_user(group_code, username):
-	pass
+	user_get = User.query.filter_by(name=username).first()
+	if user_get:
+		# The user exists
+		userid = user_get.id
+		user = Group.query.filter_by(group_code='group_code', id=userid).first()
+		db.session.delete(user)
+		db.session.commit()
+		return redirect('/group/<group_code>')
 
 # --------------------
 # Run the app
@@ -121,3 +148,5 @@ def remove_user(group_code, username):
 if __name__ == '__main__':
 	db.create_all()
 	app.run(debug=True)
+
+
