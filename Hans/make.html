@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Büiz-é</title>
+    <title>Büizé</title>
     <link rel='stylesheet' href='fullcalendar.css' />
     <link rel='stylesheet' href='bootstrap.css' />
     <script src='lib/jquery.min.js'></script>
@@ -16,10 +16,24 @@
 
         $(document).ready(function () {
             $('#calendar').fullCalendar({
+                customButtons: {
+                    shareButton: {
+                        text: 'Share',
+                        click: function() {
+                            alert('Added to Group');
+                        }
+                    },
+                    clearButton: {
+                        text: 'Clear',
+                        click: function() {
+                            $('#calendar').fullCalendar('removeEvents');
+                        }
+                    }
+                },
                 header: {
                     left: 'prev,next today',
-                    center: 'title',
-                    right: ''
+                    center: '',
+                    right: 'clearButton, shareButton'
                 },
                 selectable: true,
                 selectHelper: true,
@@ -54,33 +68,20 @@
                 },
             });
         });
-
-        function clearAll() {
-            $('#calendar').fullCalendar('removeEvents');
-        };
     </script>
 </head>
 
 <body>
     <div id='main'>
-        <div id='logo'>
-            <h1>Büiz-é</h1>
-            <img src='' alt=''>
+        <div id='logo-make'>
+            <img src='Splash/images/logo-b.svg' alt=''>
         </div>
-
-        <div id='link'>
-            <input type="text" disabled='disabled' value='link here' size='6'></input>
-            <button type="button" id='share'>Share</button>
+        <div class='key'>
+            UNIQUECALENDARID
         </div>
-        <br>
-        <div id='clearbutton' align='left'>
-            <button type="button" onclick="clearAll()">Clear All</button>
-        </div>
-
-        <div class='clearfix'></div>
         <div id='calendar'>
         </div>
     </div>
 </body>
 
-</html>
+</html> 

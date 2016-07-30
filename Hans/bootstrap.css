@@ -4,20 +4,32 @@ html,body{
     padding: 0;
     margin: 0;
     width: 100%;
+    overflow-x: hidden;
 }
 #main{
-    padding: 3em;
     padding-left: 6em;
 }
-#logo{
+#logo-make{
+    text-align: center;
+    margin-bottom:3em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    width: 100%;
+    background-color: rgba(0,0,0,0.1);
 }
-#link{
-    float: right;
-    margin-bottom: 2em; 
-    width: 5em;
+#logo-make img{
+    height: 5em;
+    position: relative;
+    right: 2em;
+}
+.key{
+    width: 100%;
+    text-align: center;
+    position: relative;
+    right: 2em;
 }
 #calendar{
-    width: 100%;
+    margin-right: 3em;
 }
 .fc-scroller{
     height: auto!important;
