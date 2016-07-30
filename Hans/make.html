@@ -72,16 +72,39 @@
 </head>
 
 <body>
+    <div id='sidebar'>
+        <!--<img id='sidebar-arrow' src='images/right-arrow-w.svg' alt=''>-->
+        <ul id='sidebar-items'>
+            <li id='logo-make'>
+                <img src='Splash/images/logo-b.svg' alt=''>
+            </li>
+            <li class='key'>
+                <p>UNIQUECALENDARID</p>
+            </li>
+            <li class='avatar'>
+                <p><img src='images/contacts.png'>John</p>
+            </li>
+            <li class='avatar'>
+                <p><img src='images/contacts.png'>Adam</p>
+            </li>
+            <li class='avatar'>
+                <p><img src='images/contacts.png'>Shaniqua</p>
+            </li>
+            <li class='add'>
+                <p><img src='images/add.png'></p>
+            </li>
+        </ul>
+    </div>
     <div id='main'>
-        <div id='logo-make'>
-            <img src='Splash/images/logo-b.svg' alt=''>
-        </div>
-        <div class='key'>
-            UNIQUECALENDARID
-        </div>
         <div id='calendar'>
         </div>
     </div>
+
+    <script>
+        $(function(){
+            $('#sidebar')
+        });
+    </script>
 </body>
 
 </html> 

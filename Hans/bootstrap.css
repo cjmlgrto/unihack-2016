@@ -6,30 +6,80 @@ html,body{
     width: 100%;
     overflow-x: hidden;
 }
+#sidebar{
+    height:100%;
+    position: fixed;
+    left:0;
+    background-color: rgba(30,30,30,0.3);
+    width: 20vw;
+    z-index: 998;
+    overflow-y: scroll;
+}
+#sidebar-items{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+#sidebar-items li{
+    padding: 0;
+}
+.avatar{
+    border: 1px solid rgba(0,0,0,0.1);
+}
+.avatar:hover{
+    background-color: rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    -webkit-transition: background-color 0.2s;
+    cursor: pointer; cursor: hand;
+}
+.avatar img, .add img{
+    width: 4vw;
+    vertical-align: middle;
+    margin: 1em;
+    margin-bottom: 0.1em;
+    margin-top:0.1em;
+}
+.avatar p{
+    font-size: 1.5vw;
+}
+.add img:hover{
+    cursor: pointer; cursor: hand;
+}
+.add img:hover{
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+}
 #main{
-    padding-left: 6em;
+    padding-left: 20vw;
 }
 #logo-make{
     text-align: center;
-    margin-bottom:3em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    width: 100%;
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(255,255,255,0.2);
+    z-index: 999;
 }
 #logo-make img{
-    height: 5em;
-    position: relative;
-    right: 2em;
+    width: 10vw;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 .key{
-    width: 100%;
     text-align: center;
-    position: relative;
-    right: 2em;
+}
+.key p{
+    font-size: 1.5vw;
+    color: rgba(255,255,255,0.8);
+    background-color: rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1); 
+    padding: 0.5em;
+    margin: 0;
 }
 #calendar{
-    margin-right: 3em;
+    margin: 10vh;
+    margin-right: 15vw;
+    margin-left: 15vw;
 }
 .fc-scroller{
     height: auto!important;
