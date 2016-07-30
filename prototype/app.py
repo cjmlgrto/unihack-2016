@@ -4,6 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database1.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -79,10 +80,30 @@ def group(group_code):
 	group_code = group_code
 	return render_template('group.html', users=users, group_code=group_code)
 
-@app.route('/group/<group_code>/add_user', methods=['POST'])
+@app.route('/group/<group_code>/add_users', methods=['POST'])
 def add_user(group_code):
 	username = request.form['username']
-	return username + ' added!'
+	person_id = User.query.filter_by(name=username).first().id
+	new_user = Group(group_code, person_id)
+	db.session.add(new_user)
+	db.session.commit()
+	url = '/group/' + group_code
+	return redirect(url)
+
+# users = Group.query.filter_by(group_code=group_code).first()
+# 	user_ids = [i.User.id for i in users]
+# 	userid = User.query.filter_by(name=username).first()
+# 	url = '/group/' + group_code
+# 	if userid == None:
+# 		return redirect(url)
+# 	else:
+# 		if userid in user_ids:
+# 			return redirect(url)
+# 		else:
+# 			user = Group(group_code, userid)
+# 			db.session.add(user)
+# 			db.session.commit()
+# 			return redirect(url)
 
 if __name__ == '__main__':
 	db.create_all()
