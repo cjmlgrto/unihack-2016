@@ -1,89 +1,85 @@
-# ---------------------------------
-# Import Modules
-# ---------------------------------
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-# setup Flask
+from datetime import datetime
+from base64 import b64encode
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test5.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test4.db'
 db = SQLAlchemy(app)
 
-# ---------------------------------
-# SQL Database
-# ---------------------------------
 
 ################ DATABASE SETUP ########################
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
-    # The 'name' is really the code that is generated, however, it was left as name becuase i'm lazy
-    firstName = db.Column(db.String(80))
-    lastName = db.Column(db.String(80))
     calendar = db.Column(db.String)
     groups = db.relationship('Group', backref='user', lazy='dynamic')
 
-    def __init__(self, name, calendar = '', firstName = '', lastName = ''):
+    def __init__(self, name, calendar = ""):
         self.name = name
         self.calendar = calendar
-        self.firstName = firstName
-        self.lastName = lastName
+
+    #def __repr__(self):
+    #	return self.name
 
 class Group(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	group_code = db.Column(db.Integer, unique=False)
-
+	groupCode = db.Column(db.Integer, unique=False)
 	person_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-	def __init__(self, group_code, person_id):
-		self.group_code = group_code
+	def __init__(self, groupCode, person_id):
+		self.groupCode = groupCode
 		self.person_id = person_id
 
-# ---------------------------------
-# HOME PAGE ROUTING
-# ---------------------------------
 
-# renders homepage
+################## ROUTING ########################
+
+def returnNames(arr):
+	return []
+
+# displays the home page
 @app.route('/')
 def home():
 	return render_template('home.html')
 
-# checks for username then renders homepage
+# checks for username availability
 @app.route('/', methods=['POST'])
 def check_username():
 	username = request.form['username']
-	db_user = User.query.filter_by(name=username).first()
-	if db_user is not None:
+	dbUsername = User.query.filter_by(name=username).all()
+	if dbUsername != []:
 		return render_template('home.html', username_exists=True, username=username)
 	else:
 		return render_template('home.html', username_exists=False, username=username)
 
-# ---------------------------------
-# USERS ROUTING
-# ---------------------------------
-
 # renders a user's page
 @app.route('/user/<username>')
 def user(username):
-	db_user = User.query.filter_by(name=username).first()
-	if db_user is not None:
-		events = db_user.calendar
-		return render_template('user.html', username=username, events=events)
+	dbUsername = User.query.filter_by(name=username).all()
+	# Creates a list of the users with that name
+	if dbUsername != []:
+		#events = faux_users[username]
+		events = dbUsername[0].calendar
+		# What is the code above?
+		#return render_template('user.html', username=username, events=events)
+		return render_template('user.html', username=username)
 	else:
-		return render_template('404.html', value=db_user)
+		return render_template('404.html', value=username)
 
+# creates a new user's page
 @app.route('/new_user/<username>')
 def new_user(username):
-	db_user = User.query.filter_by(name=username).first()
-	if db_user is None:
-		new = User(username)
-		db.session.add(new)
+	dbUsername = User.query.filter_by(name=username).all()
+	if dbUsername == []:
+		me = User(username)
+		db.session.add(me)
 		db.session.commit()
 		url = '/user/' + username
 		return redirect(url)
-	else:
-		return render_template('404.html', value=username)
+	return render_template('404.html', value=username)
+
 
 ###################	EDITS BY ALEX UP TO HERE ##############
 
@@ -136,10 +132,6 @@ def add_user(group_code):
 			faux_groups[group_code].append(username)
 	url = '/group/' + group_code
 	return redirect(url)
-
-# ---------------------------------
-# Run Flask
-# ---------------------------------
 
 if __name__ == '__main__':
 	db.create_all()
