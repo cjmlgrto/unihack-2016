@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel='stylesheet' href='fullcalendar.css' />
+		<link rel='stylesheet' href='test.css' />
+		<script src='lib/jquery.min.js'></script>
+		<script src='lib/moment.min.js'></script>
+		<script src='fullcalendar.js'></script>
+<script>
+
+	$(document).ready(function() {
+		
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			selectable: true,
+			selectHelper: true,
+			select: function(start, end) {
+				var eventData;
+				eventData = {
+					start: start,
+					end: end
+				};
+				$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+				$('#calendar').fullCalendar('unselect');
+				console.log(eventData.start._d,eventData.end._d);
+				console.log(eventData);
+			},
+			editable: false,
+			eventLimit: true, // allow "more" link when too many events
+			events: [],
+
+		});
+		
+	});
+
+</script>
+	</head>
+	<body>
+		<div id='calendar'>
+		</div>
+	</body>
+</html>
