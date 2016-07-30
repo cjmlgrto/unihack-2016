@@ -90,6 +90,24 @@ def add_user(group_code):
 	url = '/group/' + group_code
 	return redirect(url)
 
+def add_user(group_code):
+    username = request.form['username']
+    person = User.query.filter_by(name=username).first()
+    url = '/group/' + group_code
+    if person is None:
+        return redirect(url)
+    else:
+        person_id = person.id
+        group = Group.query.filter_by(group_code=group_code).first()
+        for user in group.users:
+            if user.id == person_id:
+                return redirect(url)
+        user = Group(group_code, person_id)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url)
+        
+
 # users = Group.query.filter_by(group_code=group_code).first()
 # 	user_ids = [i.User.id for i in users]
 # 	userid = User.query.filter_by(name=username).first()
@@ -104,6 +122,7 @@ def add_user(group_code):
 # 			db.session.add(user)
 # 			db.session.commit()
 # 			return redirect(url)
+
 
 if __name__ == '__main__':
 	db.create_all()
