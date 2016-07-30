@@ -1,1 +1,2 @@
-faux_usernames = ['alex']
+faux_usernames = []
+faux_users = {}

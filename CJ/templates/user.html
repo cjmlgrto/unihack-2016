@@ -6,5 +6,22 @@
 	</head>
 	<body>
 		<h1><a href="/">Busy</a> / {{ username }}</h1>
+
+		<h2>is busy at these times:</h2>
+
+		<ul>
+			{% for key, value in events.iteritems() %}
+				<li>{{ value[0] }}-{{ value[1] }} <a href="/user/{{ username }}/delete_event/{{ key }}">X</a></li>
+			{% endfor %}
+		</ul>
+
+		<hr>
+
+		<form action="{{ username }}/create_event/" method="post">
+			start time (0-24hrs): <input type="text" name="start_time"><br>
+			end time (0-24hrs): <input type="text" name="end_time"><br>
+			<input type="submit" value="Create event">
+		</form>
+
 	</body>
 </html>

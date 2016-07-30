@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from usernames import faux_usernames
+from usernames import faux_usernames, faux_users
 from groups import faux_groups
 from datetime import datetime
 from base64 import b64encode
@@ -12,8 +12,8 @@ def home():
 	return render_template('home.html')
 
 # checks for username availability
-@app.route('/login/', methods=['POST'])
-def login():
+@app.route('/', methods=['POST'])
+def check_username():
 	username = request.form['username']
 	if username in faux_usernames:
 		return render_template('home.html', username_exists=True, username=username)
@@ -24,7 +24,8 @@ def login():
 @app.route('/user/<username>')
 def user(username):
 	if username in faux_usernames:
-		return render_template('user.html', username=username)
+		events = faux_users[username]
+		return render_template('user.html', username=username, events=events)
 	else:
 		return username + ' does not exist!'
 
@@ -32,18 +33,20 @@ def user(username):
 @app.route('/new_user/<username>')
 def new_user(username):
 	faux_usernames.append(username)
-	return render_template('user.html', username=username)
+	faux_users[username] = {}
+	url = '/user/' + username
+	return redirect(url)
 
 # creates a new group
 @app.route('/new_group/')
 def new_group():
-	group_code = generate_group_code()
+	group_code = generate_code()
 	faux_groups.append(group_code)
 	url = '/group/' + group_code
 	return redirect(url)
 
-# generates a group code
-def generate_group_code():
+# generates a code
+def generate_code():
 	key = b64encode(str(hash(datetime.now())))
 	return key
 
@@ -54,6 +57,25 @@ def group(group_code):
 		return render_template('group.html', group_code=group_code)
 	else:
 		return group_code + ' does not exist!'
+
+# creates an event for specific user
+@app.route('/user/<username>/create_event/', methods=['POST'])
+def create_event(username):
+	if username in faux_usernames:
+		start_time = request.form['start_time']
+		end_time = request.form['end_time']
+		event_id = generate_code()
+		faux_users[username][event_id] = [start_time, end_time]
+	url = '/user/' + username
+	return redirect(url)
+
+# deletes an event for a specific user
+@app.route('/user/<username>/delete_event/<event_id>')
+def delete_event(username,event_id):
+	if username in faux_usernames:
+		faux_users[username].pop(event_id)
+	url = '/user/' + username
+	return redirect(url)
 
 if __name__ == '__main__':
 	app.run(debug=True)
