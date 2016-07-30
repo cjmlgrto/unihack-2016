@@ -72,7 +72,7 @@ def new_group(username):
 
 @app.route('/group/<group_code>')
 def group(group_code):
-	users = User.query.filter_by(group_code=group_code).all()
+	users = Group.query.filter_by(group_code=group_code).all()
 	return render_template('group.html', users=users)
 
 @app.route('/group/<group_code>/add_user', methods=['POST'])
