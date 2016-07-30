@@ -1,17 +1,25 @@
-# ---------------------------------
-# Import Modules
-# ---------------------------------
+# TODO -----------------
+# [] Create event method- can only be implemented once the UI has been hooked up
+# [] Delete event method- again, can only be implemented after UI integration
+# [] Add users to a group
+# [] Remove users to a group
+# ----------------------
+
+# --------------------
+# Import modules
+
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-# setup Flask
+# --------------------
+# Initialise app
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/tester1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/users.db'
 db = SQLAlchemy(app)
 
-# ---------------------------------
-# SQL Database
-# ---------------------------------
+# --------------------
+# Models for SQL
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,23 +39,19 @@ class User(db.Model):
 class Group(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	group_code = db.Column(db.String, unique=False)
-
 	person_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 	def __init__(self, group_code, person_id):
 		self.group_code = group_code
 		self.person_id = person_id
 
-# ---------------------------------
-# HOME PAGE ROUTING
-# ---------------------------------
+# --------------------
+# Home page Routing
 
-# renders homepage
 @app.route('/')
 def home():
 	return render_template('home.html')
 
-# checks for username then renders homepage
 @app.route('/', methods=['POST'])
 def check_username():
 	username = request.form['username']
@@ -57,11 +61,9 @@ def check_username():
 	else:
 		return render_template('home.html', username_exists=False, username=username)
 
-# ---------------------------------
-# USERS ROUTING
-# ---------------------------------
+# --------------------
+# User page Routing
 
-# renders a user's page
 @app.route('/user/<username>')
 def user(username):
 	db_user = User.query.filter_by(name=username).first()
@@ -71,7 +73,6 @@ def user(username):
 	else:
 		return render_template('404.html', value=db_user)
 
-# creates a new user and redirects to the new user page
 @app.route('/new_user/<username>')
 def new_user(username):
 	db_user = User.query.filter_by(name=username).first()
@@ -84,93 +85,38 @@ def new_user(username):
 	else:
 		return render_template('404.html', value=username)
 
-# creates a new event for a specific user
 @app.route('/user/<username>/create_event/', methods=['POST'])
 def create_event(username):
-	# create the event
-	start = request.form['start']
-	end = request.form['end']
-	event = (start,end)
-
-	# check if username in database
-	db_user = User.query.filter_by(name=username).first()
-	if db_user is not None:
-		# insert event into row
-
-		# redirect to user page
-		url = '/user/' + username
-		return redirect(url)
-	else:
-		return render_template('404.html', value=username)
-
-
-
-
-###################	EDITS BY ALEX UP TO HERE ##############
-
-# ---------------------------------
-# GROUPS ROUTING
-# ---------------------------------
-
-# creates a new group
-@app.route('/new_group/')
-def new_group():
-	group_code = generate_code()
-	url = '/group/' + group_code
+	url = '/user/' + username
 	return redirect(url)
 
-# generates a code
-def generate_code():
-	key = b64encode(str(hash(datetime.now())))
-	return key
+@app.route('/user/<username>/delete_event/<start>', methods=['POST'])
+def create_event(username):
+	url = '/user/' + username
+	return redirect(url)
 
-# renders a group page
+# --------------------
+# Group page Routing
+
 @app.route('/group/<group_code>')
 def group(group_code):
 	groups = Group.query.filter_by(group_code=group_code).all()
 	users = [i.user for i in groups]
-
 	if users: # If users exist in this group
 		return render_template('group.html', group_code=group_code, users=users)
 	else:
 		return render_template('404.html', value=group_code)
 
-# Not going to work on this for the moment becuase I think we're going to do it
-
-@app.route('/user/<username>/create_event/', methods=['POST'])
-def create_event(username):
-	db_user = User.query.filter_by(name=username).first()
-	if username == db_user.name:
-		start_time = request.form['start_time']
-		end_time = request.form['end_time']
-		event_id = generate_code()
-		faux_users[username][event_id] = [start_time, end_time]
-	url = '/user/' + username
-	return redirect(url)
-
-# deletes an event for a specific user
-@app.route('/user/<username>/delete_event/<event_id>')
-def delete_event(username,event_id):
-	if username in faux_usernames:
-		faux_users[username].pop(event_id)
-	url = '/user/' + username
-	return redirect(url)
-
-
-# adds a user to a unique group
 @app.route('/group/<group_code>/add_user', methods=['POST'])
 def add_user(group_code):
-	
-	if group_code in faux_groups:
-		username = request.form['username']
-		if username in faux_usernames:
-			faux_groups[group_code].append(username)
-	url = '/group/' + group_code
-	return redirect(url)
+	pass
 
-# ---------------------------------
-# Run Flask
-# ---------------------------------
+@app.route('/group/<group_code>/remove_user/<username>')
+def remove_user(group_code, username):
+	pass
+
+# --------------------
+# Run the app
 
 if __name__ == '__main__':
 	db.create_all()
