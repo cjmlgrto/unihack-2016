@@ -10,9 +10,9 @@ def home():
 def check_username():
 	username = request.form['username']
 	if username != 'bob':
-		return username + ' is free!'
+		return render_template('home.html', username_free=True, username=username)
 	else:
-		return 'nope!'
+		return render_template('home.html', username_free=False, username=username)
 
 if __name__ == '__main__':
 	app.run(debug=True)
