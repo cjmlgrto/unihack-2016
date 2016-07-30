@@ -1,32 +1,50 @@
-<!---Last edit made 18:41 by Miel-->
-
 <!doctype html>
 <html>
 
 <head>
     <meta charset="UTF-8">
-    <title>Büiz-é</title>
+    <title>Büizé</title>
     <link rel='stylesheet' href="{{ url_for('static', filename='css/fullcalendar.css') }}" />
     <link rel='stylesheet' href="{{ url_for('static', filename='css/bootstrap.css') }}" />
     <link rel='stylesheet' href="{{ url_for('static', filename='css/make.css') }}" />
-
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/fullcalendar.js') }}"></script>
-
+    <script src="{{ url_for('static', filename= 'js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/fullcalendar.js') }}"></script>
     <script>
         var n = 0;
-
-
-        calendar = [] //full list of events in user's calendar as json objects (start, end, id)
+        calendar1 = []; //full list of events in user's calendar as json objects (start, end, id)
+        calendar2 = [];
         var n = 0; //counter to generate unique id for each event
 
         $(document).ready(function () {
-            $('#calendar').fullCalendar({
+            $('#calendar1').fullCalendar({
+                customButtons: {
+                    shareButton: {
+                        text: 'Share',
+                        click: function () {
+                            alert('Added to Group');
+                        }
+                    },
+                    clearButton: {
+                        text: 'Clear',
+                        click: function () {
+                            $('#calendar1').fullCalendar('removeEvents');
+                        }
+                    },
+                    overlayButton: {
+                        text: 'overlay',
+                        click: function () {
+                            $('#calendar2').css({
+                                'position': 'absolute',
+                                'top': '0.70em'
+                            });
+                        }
+                    }
+                },
                 header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
+                    left: 'overlayButton',
+                    center: '',
+                    right: 'clearButton, shareButton'
                 },
                 selectable: true,
                 selectHelper: true,
@@ -39,8 +57,8 @@
                         end: end, //end time
                         id: n //unique event id (order in which events are created starting on index 0)
                     };
-                    $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    $('#calendar').fullCalendar('unselect');
+                    $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    $('#calendar1').fullCalendar('unselect');
                     calendar.push(eventData); //append user's calendar list with latest event data
                     n++;
                 },
@@ -50,7 +68,46 @@
 
                 //Deletes events on click
                 eventClick: function (eventData, jsEvent, view) {
-                    $('#calendar').fullCalendar('removeEvents', function (events) {
+                    $('#calendar1').fullCalendar('removeEvents', function (events) {
+                        for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
+                            if (eventData.id == calendar[i].id) {
+                                calendar.splice(i, 1);
+                            };
+                        };
+                        return events == eventData;
+                    });
+                },
+            });
+
+            $('#calendar2').fullCalendar({
+                header: {
+                    left: '',
+                    center: '',
+                    right: ''
+                },
+                selectable: true,
+                selectHelper: true,
+
+                //Creates events on click/drag
+                select: function (start, end, id) {
+                    var eventData;
+                    eventData = {
+                        start: start, //start time
+                        end: end, //end time
+                        id: n //unique event id (order in which events are created starting on index 0)
+                    };
+                    $('#calendar2').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    $('#calendar2').fullCalendar('unselect');
+                    calendar.push(eventData); //append user's calendar list with latest event data
+                    n++;
+                },
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events: [], //private variable to temporaily store event data
+
+                //Deletes events on click
+                eventClick: function (eventData, jsEvent, view) {
+                    $('#calendar2').fullCalendar('removeEvents', function (events) {
                         for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
                             if (eventData.id == calendar[i].id) {
                                 calendar.splice(i, 1);
@@ -61,33 +118,45 @@
                 },
             });
         });
-
-        function clearAll() {
-            $('#calendar').fullCalendar('removeEvents');
-        };
     </script>
 </head>
 
 <body>
+    <div id='sidebar'>
+        <!--<img id='sidebar-arrow' src='images/right-arrow-w.svg' alt=''>-->
+        <ul id='sidebar-items'>
+            <li id='logo-make'>
+                <img src="{{ url_for('static', filename= 'images/logo-b.svg') }}" alt=''>
+            </li>
+            <li class='key'>
+                <p>UNIQUECALENDARID</p>
+            </li>
+            <li class='avatar'>
+                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}" >John</p>
+            </li>
+            <li class='avatar'>
+                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}">Adam</p>
+            </li>
+            <li class='avatar'>
+                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}">Shaniqua</p>
+            </li>
+            <li class='add'>
+                <p><img src="{{ url_for('static', filename= 'images/add.png') }}"></p>
+            </li>
+        </ul>
+    </div>
     <div id='main'>
-        <div id='logo'>
-            <h1>Büiz-é</h1>
-            <img src='' alt=''>
+        <div id='calendar1' class='calendar'>
         </div>
-
-        <div id='link'>
-            <input type="text" disabled='disabled' value='link here' size='6'></input>
-            <button type="button" id='share'>Share</button>
-        </div>
-        <br>
-        <div id='clearbutton' align='left'>
-            <button type="button" onclick="clearAll()">Clear All</button>
-        </div>
-
-        <div class='clearfix'></div>
-        <div id='calendar'>
+        <div id='calendar2' class='calendar'>
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $('#sidebar')
+        });
+    </script>
 </body>
 
 </html>

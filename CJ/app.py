@@ -11,7 +11,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from base64 import b64encode
 
 # --------------------
 # Initialise app
@@ -52,16 +51,17 @@ class Group(db.Model):
 
 @app.route('/')
 def home():
-	return render_template('home.html')
+	return render_template('index.html')
 
 @app.route('/', methods=['POST'])
 def check_username():
-	username = request.form['create']
-	db_user = User.query.filter_by(name=username).first()
-	if db_user is not None:
-		return render_template('index.html', username_exists=True, username=username)
-	else:
-		return render_template('index.html', username_exists=False, username=username)
+	while 1:
+		username = generate_code()
+		db_user = User.query.filter_by(name=username).first()
+		if db_user is not None:
+			continue
+		else:
+			return render_template('make.html', username=username)
 
 # --------------------
 # User page Routing
@@ -147,7 +147,7 @@ def remove_user(group_code, username):
 # Other functions
 
 def generate_code():
-	key = b64encode(str(hash(datetime.now())))
+	key = hash(str(datetime.now()))
 	return key
 
 # --------------------
