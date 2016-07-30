@@ -1,0 +1,48 @@
+from flask import Flask, render_template, request, redirect
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database.db'
+db = SQLAlchemy(app)
+
+class User(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(80), unique=True)
+	calendar = db.Column(db.String)
+	groups = db.relationship('Group', backref='user', lazy='dynamic')
+
+	def __init__(self, name, calendar=None):
+		self.name = name
+		self.calendar = calendar
+
+class Group(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	group_code = db.Column(db.String, unique=False)
+	person_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+	def __init__(self, group_code, person_id):
+		self.group_code = group_code
+		self.person_id = person_id
+
+def generate_code():
+	key = hash(str(datetime.now()))
+	return key
+
+@app.route('/')
+def home():
+	return render_template('index.html')
+
+@app.route('/new_user')
+def new_user():
+	username = ''
+	username_exists = False
+	while not username_exists:
+		username = generate_code()
+		db_user = User.query.filter_by(name=username).first()
+		if db_user is not None:
+			username_exists = True
+	url = '/user/' + username
+	return redirect(url)
+
+
