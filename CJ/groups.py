@@ -1,1 +1,0 @@
-faux_groups = {}
