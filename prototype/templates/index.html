@@ -38,14 +38,19 @@
             <br>
         </div>
 
+        {% if username_exists == False %}
+            <script>
+                alert("That user name is not valid");
+            </script>
+        {% endif %}
         <form action="/" method="post">
             <div class="navigation">
                 <br>
                 <a class="ghost-button" href="/new_user">Create</a>
                 <br>
                 <br>
-                <a class="ghost-button" href="#">Resume</a>
-                <input type="text" name="username"> <input type="submit" value="Go">
+                <input type="submit" class="ghost-button">Resume</a>
+                <input type="text" name="username"> 
             </div>
         </form>
 
