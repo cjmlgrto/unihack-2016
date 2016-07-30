@@ -1,32 +1,52 @@
 <!doctype html>
 <html>
-	<head>
-		<title>Büizé</title>
-		<meta charset="UTF-8">
-		<link type="text/css" rel="stylesheet" href="style.css">
-		<script src="jquery-1.9.0.js"></script>
-		<script src="jquery-ui.min.js"></script>
-		<script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
-	</head>
-	<body>
-		<div class="overlay">
-	    	<img alt="IMAGE" src="images/1.jpg" class="landing">
-	    	<img alt="IMAGE" src="images/2.jpg" class="landing">
-	    	<img alt="IMAGE" src="images/3.jpg" class="landing">
-	    </div>
-	    <script>
-	    	$(document).ready(function(){
-	    		$(".overlay img:gt(0)").hide();
-			    setInterval(function(){
-			    	$(".overlay :first-child").next().fadeIn(1700);
-					$(".overlay :first-child").fadeOut(1700, function(){
-						$(".overlay :first-child").appendTo(".overlay");
-					});
-				}, 5000);
-			});
-		</script>
-	    <div class="logo">
-	    	<img alt="" src="images/logo-w-dropshadow.svg">
-	    </div>
-	</body>
+
+<head>
+    <title>Büizé | Compare Your Calendar</title>
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="style.css">
+    <script src="jquery-1.9.0.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <div class="overlay">
+        <img alt="IMAGE" src="images/1.jpg" class="landing">
+        <img alt="IMAGE" src="images/3.jpg" class="landing">
+        <img alt="IMAGE" src="images/4.jpg" class="landing">
+        <img alt="IMAGE" src="images/5.jpg" class="landing">
+        <img alt="IMAGE" src="images/6.jpg" class="landing">
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".overlay img:gt(0)").hide();
+            setInterval(function () {
+                $(".overlay :first-child").next().fadeIn(1700);
+                $(".overlay :first-child").fadeOut(1200, function () {
+                    $(".overlay :first-child").appendTo(".overlay");
+                });
+            }, 5000);
+        });
+    </script>
+    <div class="logo">
+        <img alt="" src="images/logo-w-dropshadow.svg">
+        <div class="tagline" align='center'>
+            Easily share and compare your free time.
+            <br>
+            <br> <strong>It's Time to Coincide.</strong>
+            <br>
+        </div>
+        <div class="navigation">
+            <br>
+            <a class="ghost-button" href="make.html">Create</a>
+            <br>
+            <br>
+            <a class="ghost-button" href="make.html">Resume</a>
+        </div>
+    </div>
+
+
+</body>
+
 </html>

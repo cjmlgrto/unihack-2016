@@ -11,7 +11,8 @@
     <script src='fullcalendar.js'></script>
     <script>
         var n = 0;
-        calendar = [] //full list of events in user's calendar as json objects (start, end, id)
+        calendar = []; //full list of events in user's calendar as json objects (start, end, id)
+        calendar2 = [];
         var n = 0; //counter to generate unique id for each event
 
         $(document).ready(function () {
@@ -58,6 +59,58 @@
                 //Deletes events on click
                 eventClick: function (eventData, jsEvent, view) {
                     $('#calendar').fullCalendar('removeEvents', function (events) {
+                        for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
+                            if (eventData.id == calendar[i].id) {
+                                calendar.splice(i, 1);
+                            };
+                        };
+                        return events == eventData;
+                    });
+                },
+            });
+            $('#calendar2').fullCalendar({
+                customButtons: {
+                    shareButton: {
+                        text: 'Share',
+                        click: function() {
+                            alert('Added to Group');
+                        }
+                    },
+                    clearButton: {
+                        text: 'Clear',
+                        click: function() {
+                            $('#calendar').fullCalendar('removeEvents');
+                        }
+                    }
+                },
+                header: {
+                    left: '',
+                    center: '',
+                    right: 'clearButton, shareButton'
+                },
+                selectable: true,
+                selectHelper: true,
+
+                //Creates events on click/drag
+                select: function (start, end, id) {
+                    var eventData;
+                    eventData = {
+                        start: start, //start time
+                        end: end, //end time
+                        id: n //unique event id (order in which events are created starting on index 0)
+                    };
+                    $('#calendar2').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    $('#calendar2').fullCalendar('unselect');
+                    calendar.push(eventData); //append user's calendar list with latest event data
+                    n++;
+                },
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events: [], //private variable to temporaily store event data
+
+                //Deletes events on click
+                eventClick: function (eventData, jsEvent, view) {
+                    $('#calendar2').fullCalendar('removeEvents', function (events) {
                         for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
                             if (eventData.id == calendar[i].id) {
                                 calendar.splice(i, 1);
