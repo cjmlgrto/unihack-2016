@@ -9,12 +9,6 @@
 
 		<h2>is busy at these times:</h2>
 
-		<ul>
-			{% for key, value in events.iteritems() %}
-				<li>{{ value[0] }}-{{ value[1] }} <a href="/user/{{ username }}/delete_event/{{ key }}">X</a></li>
-			{% endfor %}
-		</ul>
-
 		<hr>
 
 		<form action="{{ username }}/create_event/" method="post">

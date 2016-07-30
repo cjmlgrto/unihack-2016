@@ -5,7 +5,7 @@ from datetime import datetime
 from base64 import b64encode
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test3.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test4.db'
 db = SQLAlchemy(app)
 
 
@@ -21,8 +21,8 @@ class User(db.Model):
         self.name = name
         self.calendar = calendar
 
-    def __repr__(self):
-        return self.name
+    #def __repr__(self):
+    #	return self.name
 
 class Group(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -33,11 +33,11 @@ class Group(db.Model):
 		self.groupCode = groupCode
 		self.person_id = person_id
 
-	def __repr__(self):
-		return self.groupCode
-
 
 ################## ROUTING ########################
+
+def returnNames(arr):
+	return []
 
 # displays the home page
 @app.route('/')
@@ -48,7 +48,7 @@ def home():
 @app.route('/', methods=['POST'])
 def check_username():
 	username = request.form['username']
-	dbUsername = User.query.filter_all(name=username).all()
+	dbUsername = User.query.filter_by(name=username).all()
 	if dbUsername != []:
 		return render_template('home.html', username_exists=True, username=username)
 	else:
@@ -57,19 +57,31 @@ def check_username():
 # renders a user's page
 @app.route('/user/<username>')
 def user(username):
-	if username in faux_usernames:
-		events = faux_users[username]
-		return render_template('user.html', username=username, events=events)
+	dbUsername = User.query.filter_by(name=username).all()
+	# Creates a list of the users with that name
+	if dbUsername != []:
+		#events = faux_users[username]
+		events = dbUsername[0].calendar
+		# What is the code above?
+		#return render_template('user.html', username=username, events=events)
+		return render_template('user.html', username=username)
 	else:
 		return render_template('404.html', value=username)
 
 # creates a new user's page
 @app.route('/new_user/<username>')
 def new_user(username):
-	faux_usernames.append(username)
-	faux_users[username] = {}
-	url = '/user/' + username
-	return redirect(url)
+	dbUsername = User.query.filter_by(name=username).all()
+	if dbUsername == []:
+		me = User(username)
+		db.session.add(me)
+		db.session.commit()
+		url = '/user/' + username
+		return redirect(url)
+	return render_template('404.html', value=username)
+
+
+###################	EDITS BY ALEX UP TO HERE ##############
 
 # creates a new group
 @app.route('/new_group/')
