@@ -41,7 +41,7 @@ def new_user(username):
 @app.route('/new_group/')
 def new_group():
 	group_code = generate_code()
-	faux_groups.append(group_code)
+	faux_groups[group_code] = []
 	url = '/group/' + group_code
 	return redirect(url)
 
@@ -54,7 +54,7 @@ def generate_code():
 @app.route('/group/<group_code>')
 def group(group_code):
 	if group_code in faux_groups:
-		return render_template('group.html', group_code=group_code)
+		return render_template('group.html', group_code=group_code, users=users, username=usernames)
 	else:
 		return render_template('404.html', value=group_code)
 
@@ -75,6 +75,16 @@ def delete_event(username,event_id):
 	if username in faux_usernames:
 		faux_users[username].pop(event_id)
 	url = '/user/' + username
+	return redirect(url)
+
+# adds a user to a unique group
+@app.route('/group/<group_code>/add_user', methods=['POST'])
+def add_user(group_code):
+	if group_code in faux_groups:
+		username = request.form['username']
+		if username in faux_usernames:
+			faux_groups[group_code].append(username)
+	url = '/group/' + group_code
 	return redirect(url)
 
 if __name__ == '__main__':

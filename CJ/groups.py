@@ -1,1 +1,1 @@
-faux_groups = []
+faux_groups = {}
