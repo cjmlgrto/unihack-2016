@@ -141,7 +141,7 @@
                 <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}">Shaniqua</p>
             </li>
             <li class='add'>
-                <p><img src="{{ url_for('static', filename= 'images/add.png') }}"></p>
+                <a href="/new_group/{{ user.name }}"><p><img src="{{ url_for('static', filename= 'images/add.png') }}"></p></a>
             </li>
         </ul>
     </div>
