@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
-from usernames import faux_usernames, faux_users
-from groups import faux_groups
+
+from models import *
+
 from datetime import datetime
 from base64 import b64encode
 
