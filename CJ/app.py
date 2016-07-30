@@ -27,7 +27,7 @@ def user(username):
 		events = faux_users[username]
 		return render_template('user.html', username=username, events=events)
 	else:
-		return username + ' does not exist!'
+		return render_template('404.html', value=username)
 
 # creates a new user's page
 @app.route('/new_user/<username>')
@@ -56,7 +56,7 @@ def group(group_code):
 	if group_code in faux_groups:
 		return render_template('group.html', group_code=group_code)
 	else:
-		return group_code + ' does not exist!'
+		return render_template('404.html', value=group_code)
 
 # creates an event for specific user
 @app.route('/user/<username>/create_event/', methods=['POST'])
