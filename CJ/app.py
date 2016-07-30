@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from usernames import faux_usernames
+from groups import faux_groups
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -26,7 +28,7 @@ def user(username):
 		return username + " does not exist!"
 
 # creates a new user's page
-@app.route('/new/<username>')
+@app.route('/new_user/<username>')
 def new_user(username):
 	faux_usernames.append(username)
 	return render_template('user.html', username=username)
