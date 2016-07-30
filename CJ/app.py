@@ -71,6 +71,7 @@ def user(username):
 	else:
 		return render_template('404.html', value=db_user)
 
+# creates a new user and redirects to the new user page
 @app.route('/new_user/<username>')
 def new_user(username):
 	db_user = User.query.filter_by(name=username).first()
