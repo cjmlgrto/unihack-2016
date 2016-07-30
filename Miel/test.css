@@ -1,0 +1,13 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+html,body{
+	font-family: Open Sans;
+	padding: 0;
+	margin: 5vh;
+}
+.fc-scroller{
+	height: auto!important;
+	overflow-y: hidden!important;
+}
+.fc-row{
+	height: auto!important;
+}
