@@ -9707,7 +9707,7 @@ function Calendar_constructor(element, overrides) {
 			currentView.setElement(
 				$("<div class='fc-view fc-" + viewType + "-view' />").appendTo(content)
 			);
-			//header.activateButton(viewType);
+			header.activateButton(viewType);
 		}
 
 		if (currentView) {
@@ -10233,9 +10233,9 @@ Calendar.defaults = {
 		nextYear: "next year",
 		year: 'year', // TODO: locale files need to specify this
 		today: 'today',
-		month: false,
-		week: false,
-		day: false
+		month: 'month',
+		week: 'week',
+		day: 'day'
 	},
 
 	buttonIcons: {
@@ -12528,13 +12528,13 @@ fcViews.basicWeek = {
 	duration: { weeks: 1 }
 };
 
-//fcViews.month = {
-	//'class': MonthView,
-	//duration: { months: 1 }, // important for prev/next
-	//defaults: {
-		//fixedWeekCount: true
-	//}
-//};
+fcViews.month = {
+	'class': MonthView,
+	duration: { months: 1 }, // important for prev/next
+	defaults: {
+		fixedWeekCount: true
+	}
+};
 ;;
 
 /* An abstract class for all agenda-related views. Displays one more columns with time slots running vertically.
@@ -13089,14 +13089,14 @@ fcViews.agenda = {
 	}
 };
 
-//fcViews.agendaDay = {
-//	type: 'agenda',
-//	duration: { days: 1 }
-//};
+fcViews.agendaDay = {
+	type: 'agenda',
+	duration: { days: 1 }
+};
 
 fcViews.agendaWeek = {
 	type: 'agenda',
-    duration: { weeks: 1 }
+	duration: { weeks: 1 }
 };
 ;;
 
