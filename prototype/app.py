@@ -33,6 +33,19 @@ def generate_code():
 def home():
 	return render_template('index.html')
 
+@app.route('/', method=['POST'])
+def check_username():
+	username_exists = False
+	username = request.form['username']
+	db_user = User.query.filter_by(name=username).first()
+	if db_user is not None:
+		username_exists = True
+		url = '/user/' + username
+		return redirect(url)
+	else:
+		username_exists = False
+		return render_template('index.html', username_exists=username_exists)
+
 @app.route('/new_user')
 def new_user():
 	username = ''
@@ -46,3 +59,12 @@ def new_user():
 	return redirect(url)
 
 
+
+@app.route('/user/<username>')
+def user(username):
+	db_user = User.query.filter_by(name=username).first()
+	return render_template('user.html', user=db_user)
+
+if __name__ == '__main__':
+	db.create_all()
+	app.run(debug=True)
