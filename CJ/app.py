@@ -10,6 +10,7 @@ db = SQLAlchemy(app)
 
 
 ################ DATABASE SETUP ########################
+# catz
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
