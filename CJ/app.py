@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from usernames import faux_usernames
 from groups import faux_groups
 from datetime import datetime
+from base64 import b64encode
 
 app = Flask(__name__)
 
@@ -43,8 +44,8 @@ def new_group():
 
 # generates a group code
 def generate_group_code():
-	key = datetime.now()
-	return str(hash(key))
+	key = b64encode(str(hash(datetime.now())))
+	return key
 
 # renders a group page
 @app.route('/group/<group_code>')
