@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel='stylesheet' href='fullcalendar.css' />
+		<link rel='stylesheet' href='make.css' />
+		<script src='lib/jquery.min.js'></script>
+		<script src='lib/moment.min.js'></script>
+		<script src='fullcalendar.js'></script>
+		<script>
+			var n = 0;
+			var evid = 0;
+			$(document).ready(function() {
+				$('#calendar').fullCalendar({
+					header: {
+						left: 'prev,next today',
+						center: 'title',
+						right: 'month,agendaWeek,agendaDay'
+					},
+					selectable: true,
+					selectHelper: true,
+					select: function(start, end, id) {
+						var eventData;
+						eventData = {
+							start: start,
+							end: end,
+							id: n
+						};
+						console.log(n);
+						$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+						$('#calendar').fullCalendar('unselect');
+						console.log(eventData.start._d,eventData.end._d,eventData.id);
+						n++;
+
+					},
+					editable: false,
+					eventLimit: true, // allow "more" link when too many events
+					events: [],
+					eventClick: function(eventData, jsEvent, view) {
+				        $('#calendar').fullCalendar('removeEvents', function(events){
+				        	return events == eventData;
+				        });
+				    },
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id='main'>
+			<div id='logo'>
+				<h1>BUSY</h1>
+				<img src='' alt=''>
+			</div>
+
+			<div id='link'>
+				ABC123
+			</div>
+			<div class='clearfix'></div>
+			<div id='calendar'>
+			</div>
+		</div>
+	</body>
+</html>
