@@ -8,9 +8,8 @@
 		<script src='lib/moment.min.js'></script>
 		<script src='fullcalendar.js'></script>
 <script>
-
+	var n = 0;
 	$(document).ready(function() {
-		
 		$('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
@@ -19,21 +18,26 @@
 			},
 			selectable: true,
 			selectHelper: true,
-			select: function(start, end) {
+			select: function(start, end, id) {
 				var eventData;
 				eventData = {
 					start: start,
-					end: end
+					end: end,
+					id: n
 				};
+				console.log(n);
 				$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
 				$('#calendar').fullCalendar('unselect');
-				console.log(eventData.start._d,eventData.end._d);
-				console.log(eventData);
+				console.log(eventData.start._d,eventData.end._d,eventData.id);
+				n++;
 			},
 			editable: false,
 			eventLimit: true, // allow "more" link when too many events
 			events: [],
-
+			eventClick: function(events,evid) {
+		        //$(this).fullCalendar('removeEvents' [this.id]);
+		        alert(events[parseInt(evid)]);
+		    }
 		});
 		
 	});
