@@ -53,19 +53,6 @@
                 <input type="text" name="username"> 
             </div>
         </form>
-
-        <form action="/" method="post">
-            username: <input type="text" name="username"> <input type="submit" value="Go">
-            {% if username_exists == True %}
-                <br>
-                <span style="color:red;">{{ username }} exists!</span> If this is you, <a href="/user/{{ username }}">click to edit schedule</a>.
-            {% endif %}
-            {% if username_exists == False %}
-                <br>
-                <span style="color:green;">{{ username }} is free to use!</span> <a href="/new_user/{{ username }}">click to create your schedule</a>.
-            {% endif %}
-        </form>
-
     </div>
 
 

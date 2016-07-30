@@ -33,7 +33,7 @@ def generate_code():
 def home():
 	return render_template('index.html')
 
-@app.route('/', method=['POST'])
+@app.route('/', methods=['POST'])
 def check_username():
 	username_exists = False
 	username = request.form['username']
