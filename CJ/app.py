@@ -75,6 +75,7 @@ def check_username():
 def user(username):
 	# query the database for a username
 	db_user = User.query.filter_by(name=username).first()
+	
 
 
 	if username in users_database:
