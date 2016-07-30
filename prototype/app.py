@@ -61,9 +61,10 @@ def user(username):
 	return render_template('user.html', user=db_user)
 
 @app.route('/new_group/<username>')
-def new_group():
+def new_group(username):
 	group_code = generate_code()
-	group = Group(group_code)
+	person_id = User.query.filter_by(name=username).first().id
+	group = Group(group_code, person_id)
 	db.session.add(group)
 	db.session.commit()
 	url = '/group/' + group_code
