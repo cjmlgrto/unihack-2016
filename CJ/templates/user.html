@@ -8,12 +8,13 @@
 		<h1><a href="/">Busy</a> / {{ username }}</h1>
 
 		<h2>is busy at these times:</h2>
+		{{ events[0] }} - {{ events[1] }}
 
 		<hr>
 
-		<form action="{{ username }}/create_event/" method="post">
-			start time (0-24hrs): <input type="text" name="start_time"><br>
-			end time (0-24hrs): <input type="text" name="end_time"><br>
+		<form action="/user/{{ username }}/create_event/" method="post">
+			start time (0-24hrs): <input type="text" name="start"><br>
+			end time (0-24hrs): <input type="text" name="end"><br>
 			<input type="submit" value="Create event">
 		</form>
 

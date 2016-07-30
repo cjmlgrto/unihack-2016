@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # setup Flask
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test5.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test01.db'
 db = SQLAlchemy(app)
 
 # ---------------------------------
@@ -66,7 +66,7 @@ def check_username():
 def user(username):
 	db_user = User.query.filter_by(name=username).first()
 	if db_user is not None:
-		events = db_user.calendar
+		events = eval(db_user.calendar)
 		return render_template('user.html', username=username, events=events)
 	else:
 		return render_template('404.html', value=db_user)
@@ -83,6 +83,27 @@ def new_user(username):
 		return redirect(url)
 	else:
 		return render_template('404.html', value=username)
+
+# creates a new event for a specific user
+@app.route('/user/<username>/create_event/', methods=['POST'])
+def create_event(username):
+	# create the event
+	start = request.form['start']
+	end = request.form['end']
+	event = (start,end)
+
+	# check if username in database
+	db_user = User.query.filter_by(name=username).first()
+	if db_user is not None:
+		db_user.calendar = str(event)
+		db.session.commit()
+		url = '/user/' + username
+		return redirect(url)
+	else:
+		return render_template('404.html', value=username)
+
+
+
 
 ###################	EDITS BY ALEX UP TO HERE ##############
 
@@ -106,25 +127,6 @@ def group(group_code):
 		return render_template('group.html', group_code=group_code, users=users, username=usernames)
 	else:
 		return render_template('404.html', value=group_code)
-
-# creates an event for specific user
-@app.route('/user/<username>/create_event/', methods=['POST'])
-def create_event(username):
-	if username in faux_usernames:
-		start_time = request.form['start_time']
-		end_time = request.form['end_time']
-		event_id = generate_code()
-		faux_users[username][event_id] = [start_time, end_time]
-	url = '/user/' + username
-	return redirect(url)
-
-# deletes an event for a specific user
-@app.route('/user/<username>/delete_event/<event_id>')
-def delete_event(username,event_id):
-	if username in faux_usernames:
-		faux_users[username].pop(event_id)
-	url = '/user/' + username
-	return redirect(url)
 
 # adds a user to a unique group
 @app.route('/group/<group_code>/add_user', methods=['POST'])
