@@ -33,7 +33,7 @@ def generate_code():
 def home():
 	return render_template('index.html')
 
-@app.route('/', method=['POST'])
+@app.route('/', methods=['POST'])
 def check_username():
 	username_exists = False
 	username = request.form['username']
@@ -48,17 +48,9 @@ def check_username():
 
 @app.route('/new_user')
 def new_user():
-	username = ''
-	username_exists = False
-	while not username_exists:
-		username = generate_code()
-		db_user = User.query.filter_by(name=username).first()
-		if db_user is not None:
-			username_exists = True
-	url = '/user/' + username
+	username = generate_code()
+	url = '/user/' + str(username)
 	return redirect(url)
-
-
 
 @app.route('/user/<username>')
 def user(username):
