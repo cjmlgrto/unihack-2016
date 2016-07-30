@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # setup Flask
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test01.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test02.db'
 db = SQLAlchemy(app)
 
 # ---------------------------------
@@ -95,8 +95,9 @@ def create_event(username):
 	# check if username in database
 	db_user = User.query.filter_by(name=username).first()
 	if db_user is not None:
-		db_user.calendar = str(event)
-		db.session.commit()
+		# insert event into row
+
+		# redirect to user page
 		url = '/user/' + username
 		return redirect(url)
 	else:
