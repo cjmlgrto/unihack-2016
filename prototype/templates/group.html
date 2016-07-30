@@ -133,7 +133,7 @@
             </li>
             {% for user in users %}
             <li class='avatar'>
-                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}" >{{ user.user.name }}</p>
+                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}" >{{ user.user.full_name }}</p>
             </li>
             {% endfor %}
             <li class='add'>
