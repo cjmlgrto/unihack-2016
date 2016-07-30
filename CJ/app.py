@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from group_code import *
 
 app = Flask(__name__)
 
@@ -13,6 +14,11 @@ def check_username():
 		return render_template('home.html', username_free=True, username=username)
 	else:
 		return render_template('home.html', username_free=False, username=username)
+
+@app.route('/compare/')
+def compare():
+	code = return_time()
+	return render_template('compare.html', group_code=code)
 
 if __name__ == '__main__':
 	app.run(debug=True)
