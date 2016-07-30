@@ -3,17 +3,19 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database1.db'
 db = SQLAlchemy(app)
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(80), unique=True)
+	full_name = db.Column(db.String)
 	calendar = db.Column(db.String)
 	groups = db.relationship('Group', backref='user', lazy='dynamic')
 
-	def __init__(self, name, calendar=None):
+	def __init__(self, name, calendar=None, full_name=None):
 		self.name = name
+		self.full_name = full_name
 		self.calendar = calendar
 
 class Group(db.Model):
@@ -26,7 +28,8 @@ class Group(db.Model):
 		self.person_id = person_id
 
 def generate_code():
-	key = hash(str(datetime.now()))
+	key = str(hash(str(datetime.now())))
+	key = key[0:6]
 	return str(key)
 
 @app.route('/')
@@ -73,25 +76,13 @@ def new_group(username):
 @app.route('/group/<group_code>')
 def group(group_code):
 	users = Group.query.filter_by(group_code=group_code).all()
-	return render_template('group.html', users=users)
+	group_code = group_code
+	return render_template('group.html', users=users, group_code=group_code)
 
 @app.route('/group/<group_code>/add_user', methods=['POST'])
 def add_user(group_code):
 	username = request.form['username']
-	users = Group.query.filter_by(group_code=group_code).first()
-	user_ids = [i.User.id for i in users]
-	userid = User.query.filter_by(name=username).first()
-	url = '/group/' + group_code
-	if userid == None:
-		return redirect(url)
-	else:
-		if userid in user_ids:
-			return redirect(url)
-		else:
-			user = Group(group_code, userid)
-			db.session.add(user)
-			db.session.commit()
-			return redirect(url)
+	return username + ' added!'
 
 if __name__ == '__main__':
 	db.create_all()
