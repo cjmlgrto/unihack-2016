@@ -5,22 +5,26 @@ from datetime import datetime
 from base64 import b64encode
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test4.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test5.db'
 db = SQLAlchemy(app)
 
 
 ################ DATABASE SETUP ########################
-# catz
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
+    # The 'name' is really the code that is generated, however, it was left as name becuase i'm lazy
+    firstName = db.Column(db.String(80))
+    lastName = db.Column(db.String(80))
     calendar = db.Column(db.String)
     groups = db.relationship('Group', backref='user', lazy='dynamic')
 
-    def __init__(self, name, calendar = ""):
+    def __init__(self, name, calendar = '', firstName = '', lastName = ''):
         self.name = name
         self.calendar = calendar
+        self.firstName = firstName
+        self.lastName = lastName
 
     #def __repr__(self):
     #	return self.name
@@ -137,3 +141,5 @@ def add_user(group_code):
 if __name__ == '__main__':
 	db.create_all()
 	app.run(debug=True)
+
+
