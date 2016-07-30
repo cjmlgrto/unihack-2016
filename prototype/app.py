@@ -27,7 +27,7 @@ class Group(db.Model):
 
 def generate_code():
 	key = hash(str(datetime.now()))
-	return key
+	return str(key)
 
 @app.route('/')
 def home():
@@ -49,13 +49,41 @@ def check_username():
 @app.route('/new_user')
 def new_user():
 	username = generate_code()
-	url = '/user/' + str(username)
+	user = User(username)
+	db.session.add(user)
+	db.session.commit()
+	url = '/user/' + username
 	return redirect(url)
 
 @app.route('/user/<username>')
 def user(username):
 	db_user = User.query.filter_by(name=username).first()
 	return render_template('user.html', user=db_user)
+
+@app.route('/group/<group_code>')
+def group(group_code):
+	users = User.query.filter_by(group_code=group_code).all()
+	return render_template('group.html', users=users)
+
+@app.route('/group/<group_code>/add_user', methods=['POST'])
+def add_user(group_code):
+	username = request.form['username']
+	users = Group.query.filter_by(group_code=group_code).first()
+	user_ids = [i.User.id for i in users]
+	userid = User.query.filter_by(name=username).first()
+	url = '/group/' + group_code
+	if userid = None:
+		return redirect(url)
+	else:
+		if userid in user_ids:
+			return redirect(url)
+		else:
+			user = Group(group_code, userid)
+			db.session.add(user)
+			db.session.commit()
+			return redirect(url)
+
+
 
 if __name__ == '__main__':
 	db.create_all()
