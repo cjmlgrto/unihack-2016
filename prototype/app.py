@@ -46,7 +46,7 @@ def check_username():
 		username_exists = False
 		return render_template('index.html', username_exists=username_exists)
 
-@app.route('/new_user')
+@app.route('/new_user/')
 def new_user():
 	username = generate_code()
 	user = User(username)
@@ -60,6 +60,15 @@ def user(username):
 	db_user = User.query.filter_by(name=username).first()
 	return render_template('user.html', user=db_user)
 
+@app.route('/new_group/<username>')
+def new_group():
+	group_code = generate_code()
+	group = Group(group_code)
+	db.session.add(group)
+	db.session.commit()
+	url = '/group/' + group_code
+	return redirect(url)
+
 @app.route('/group/<group_code>')
 def group(group_code):
 	users = User.query.filter_by(group_code=group_code).all()
@@ -72,7 +81,7 @@ def add_user(group_code):
 	user_ids = [i.User.id for i in users]
 	userid = User.query.filter_by(name=username).first()
 	url = '/group/' + group_code
-	if userid = None:
+	if userid == None:
 		return redirect(url)
 	else:
 		if userid in user_ids:
@@ -82,8 +91,6 @@ def add_user(group_code):
 			db.session.add(user)
 			db.session.commit()
 			return redirect(url)
-
-
 
 if __name__ == '__main__':
 	db.create_all()
