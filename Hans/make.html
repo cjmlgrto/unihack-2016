@@ -2,14 +2,15 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link rel='stylesheet' href='fullcalendar.css' />
-		<link rel='stylesheet' href='make.css' />
+		<title>Büiz-é</title>
+		<link rel='stylesheet' href='fullcalendar.css'/>
+		<link rel='stylesheet' href='make.css'/>
 		<script src='lib/jquery.min.js'></script>
 		<script src='lib/moment.min.js'></script>
 		<script src='fullcalendar.js'></script>
 		<script>
-			var n = 0;
-			var evid = 0;
+			calendar=[] //full list of events in user's calendar as json objects (start, end, id)
+			var n = 0; //counter to generate unique id for each event
 			$(document).ready(function() {
 				$('#calendar').fullCalendar({
 					header: {
@@ -19,37 +20,43 @@
 					},
 					selectable: true,
 					selectHelper: true,
+
+					//Creates events on click/drag
 					select: function(start, end, id) {
 						var eventData;
 						eventData = {
-							start: start,
-							end: end,
-							id: n
+							start: start, //start time
+							end: end, //end time
+							id: n //unique event id (order in which events are created starting on index 0)
 						};
-						console.log(n);
 						$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
 						$('#calendar').fullCalendar('unselect');
-						console.log(eventData.start._d,eventData.end._d,eventData.id);
+						calendar.push(eventData); //append user's calendar list with latest event data
 						n++;
-
 					},
 					editable: false,
 					eventLimit: true, // allow "more" link when too many events
-					events: [],
+					events: [], //private variable to temporaily store event data
+
+					//Deletes events on click
 					eventClick: function(eventData, jsEvent, view) {
 				        $('#calendar').fullCalendar('removeEvents', function(events){
+				        	for (i=0; i<calendar.length; i++){ //iterates through globa calendar list and removes events based on unique id's
+				        		if(eventData.id==calendar[i].id){
+				        			calendar.splice(i, 1);
+				        		};
+				        	};
 				        	return events == eventData;
 				        });
 				    },
 				});
-				
 			});
 		</script>
 	</head>
 	<body>
 		<div id='main'>
 			<div id='logo'>
-				<h1>BUSY</h1>
+				<h1>Büiz-é</h1>
 				<img src='' alt=''>
 			</div>
 
