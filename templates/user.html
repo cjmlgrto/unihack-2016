@@ -18,15 +18,8 @@
         ]
 
         var n = 0;
-<<<<<<< HEAD:templates/user.html
         calendar = []; //full list of events in user's calendar as json objects (start, end, id)
-=======
-        calendar1 = [];
-        calendar2 = [];
->>>>>>> 18b5dfc53269c91c2feaf5ca0c6ce2a085f9dd99:prototype/templates/user.html
         var n = 0; //counter to generate unique id for each event
-        var test_var = new Date(1470222000000).toISOString();
-        console.log(test_var)
 
         $(document).ready(function () {
             $('#calendar').fullCalendar({
@@ -69,68 +62,12 @@
                         end: end, //end time
                         id: n //unique event id (order in which events are created starting on index 0)
                     };
-<<<<<<< HEAD:templates/user.html
-=======
-                    $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    $('#calendar1').fullCalendar('unselect');
-                    calendar1.push(eventData); //append user's calendar list with latest event data
-                    n++;
-                },
-                editable: false,
-                eventLimit: true, // allow "more" link when too many events
-
-                events: times, //private variable to temporaily store event data
-
-                //Deletes events on click
-                eventClick: function (eventData, jsEvent, view) {
-                    $('#calendar1').fullCalendar('removeEvents', function (events) {
-                        for (i = 0; i < calendar1.length; i++) { //iterates through globa calendar list and removes events based on unique id's
-                            if (eventData.id == calendar1[i].id) {
-                                calendar1.splice(i, 1);
-                            };
-                        };
-                        return events == eventData;
-                    });
-                },
-            });
->>>>>>> 18b5dfc53269c91c2feaf5ca0c6ce2a085f9dd99:prototype/templates/user.html
 
                     window.location.href = window.location.href + "/create_event/" + eventData.start + "/" + eventData.end
 
-<<<<<<< HEAD:templates/user.html
                     $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
                     $('#calendar').fullCalendar('unselect');
                     calendar.push(eventData); //append user's calendar list with latest event data
-=======
-                //Creates events on click/drag
-                select: function (start, end, id) {
-                    var eventData;
-                    eventData = {
-                        start: start, //start time
-                        end: end, //end time
-                        id: n //unique event id (order in which events are created starting on index 0)
-                    };
-
-                    window.location.href =  window.location.href + "/create_event/" + eventData.start + "/" + eventData.end
-
-                    // console.log('blah')
-
-                    // $.ajax({
-                    //     url: '/create_event',
-                    //     data: eventData,
-                    //     type: 'POST',
-                    //     success: function(response) {
-                    //         console.log(response);
-                    //     },
-                    //     error: function(error) {
-                    //         console.log(error);
-                    //     }
-                    // });
-
-                    $('#calendar2').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    $('#calendar2').fullCalendar('unselect');
-                    calendar2.push(eventData); //append user's calendar list with latest event data
->>>>>>> 18b5dfc53269c91c2feaf5ca0c6ce2a085f9dd99:prototype/templates/user.html
                     n++;
                 },
                 editable: false,
@@ -139,17 +76,10 @@
 
                 //Deletes events on click
                 eventClick: function (eventData, jsEvent, view) {
-<<<<<<< HEAD:templates/user.html
                     $('#calendar').fullCalendar('removeEvents', function (events) {
                         for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
                             if (eventData.id == calendar[i].id) {
                                 calendar.splice(i, 1);
-=======
-                    $('#calendar2').fullCalendar('removeEvents', function (events) {
-                        for (i = 0; i < calendar2.length; i++) { //iterates through globa calendar list and removes events based on unique id's
-                            if (eventData.id == calendar2[i].id) {
-                                calendar2.splice(i, 1);
->>>>>>> 18b5dfc53269c91c2feaf5ca0c6ce2a085f9dd99:prototype/templates/user.html
                             };
                         };
                         return events == eventData;
@@ -168,7 +98,7 @@
                 <a href="/"><img src="{{ url_for('static', filename= 'images/logo-b.svg') }}" alt=''></a>
             </li>
             <li class='key'>
-                <p>User Code:{{ user.name }}</p>
+                <p>{{ user.name }}</p>
             </li>
             <li class='add'>
                 <a href="/new_group/{{ user.name }}"><p><img src="{{ url_for('static', filename= 'images/add.png') }}"></p></a>

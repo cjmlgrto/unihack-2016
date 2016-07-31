@@ -1,14 +1,11 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import json
-
-global_users = {}
 
 global_users = {}
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database2.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database1.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
@@ -58,7 +55,6 @@ def check_username():
 @app.route('/new_user/')
 def new_user():
 	username = generate_code()
-	global_users[username] = []
 	user = User(username)
 	db.session.add(user)
 	db.session.commit()
@@ -78,19 +74,9 @@ def user(username):
 @app.route('/user/<username>/create_event/<start>/<end>')
 def create_event(username, start, end):
 	event = [start, end]
-<<<<<<< HEAD:app.py
 	global_users[username].append(event)
 	url = '/user/' + username
 	return redirect(url)
-=======
-
-	global_users[username].append(event)
-
-	url = '/user/' + username
-	return redirect(url)
-
-	
->>>>>>> 18b5dfc53269c91c2feaf5ca0c6ce2a085f9dd99:prototype/app.py
 
 @app.route('/new_group/<username>')
 def new_group(username):
@@ -118,43 +104,6 @@ def add_user(group_code):
 	url = '/group/' + group_code
 	return redirect(url)
 
-<<<<<<< HEAD:app.py
-=======
-def add_user(group_code):
-    username = request.form['username']
-    person = User.query.filter_by(name=username).first()
-    url = '/group/' + group_code
-    if person is None:
-        return redirect(url)
-    else:
-        person_id = person.id
-        group = Group.query.filter_by(group_code=group_code).first()
-        for user in group.users:
-            if user.id == person_id:
-                return redirect(url)
-        user = Group(group_code, person_id)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url)
-        
-
-# users = Group.query.filter_by(group_code=group_code).first()
-# 	user_ids = [i.User.id for i in users]
-# 	userid = User.query.filter_by(name=username).first()
-# 	url = '/group/' + group_code
-# 	if userid == None:
-# 		return redirect(url)
-# 	else:
-# 		if userid in user_ids:
-# 			return redirect(url)
-# 		else:
-# 			user = Group(group_code, userid)
-# 			db.session.add(user)
-# 			db.session.commit()
-# 			return redirect(url)
-
-
->>>>>>> 18b5dfc53269c91c2feaf5ca0c6ce2a085f9dd99:prototype/app.py
 if __name__ == '__main__':
 	db.create_all()
 	app.run(debug=True)
