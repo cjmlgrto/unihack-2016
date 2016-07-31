@@ -11,13 +11,13 @@
     <script src="{{ url_for('static', filename= 'js/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename= 'js/fullcalendar.js') }}"></script>
     <script>
+        times = []
         var n = 0;
-        calendar1 = []; //full list of events in user's calendar as json objects (start, end, id)
-        calendar2 = [];
+        calendar = []; //full list of events in user's calendar as json objects (start, end, id)
         var n = 0; //counter to generate unique id for each event
 
         $(document).ready(function () {
-            $('#calendar1').fullCalendar({
+            $('#calendar').fullCalendar({
                 customButtons: {
                     shareButton: {
                         text: 'Share',
@@ -28,7 +28,7 @@
                     clearButton: {
                         text: 'Clear',
                         click: function () {
-                            $('#calendar1').fullCalendar('removeEvents');
+                            $('#calendar').fullCalendar('removeEvents');
                         }
                     }
                 },
@@ -48,19 +48,19 @@
                         end: end, //end time
                         id: n //unique event id (order in which events are created starting on index 0)
                     };
-                    $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    $('#calendar1').fullCalendar('unselect');
-                    calendar1.push(eventData); //append user's calendar list with latest event data
+                    $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    $('#calendar').fullCalendar('unselect');
+                    calendar.push(eventData); //append user's calendar list with latest event data
                     n++;
                     console.log(eventData.start, eventData.end);
                 },
                 editable: false,
                 eventLimit: true, // allow "more" link when too many events
-                events: [], //private variable to temporaily store event data
+                events: times, //private variable to temporaily store event data
 
                 //Deletes events on click
                 eventClick: function (eventData, jsEvent, view) {
-                    $('#calendar1').fullCalendar('removeEvents', function (events) {
+                    $('#calendar').fullCalendar('removeEvents', function (events) {
                         for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
                             if (eventData.id == calendar[i].id) {
                                 calendar.splice(i, 1);
@@ -99,9 +99,7 @@
         </ul>
     </div>
     <div id='main'>
-        <div id='calendar1' class='calendar'>
-        </div>
-        <div id='calendar2' class='calendar'>
+        <div id='calendar' class='calendar'>
         </div>
     </div>
 
