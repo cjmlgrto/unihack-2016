@@ -82,11 +82,11 @@
                 <a href="/"><img src="{{ url_for('static', filename= 'images/logo-b.svg') }}" alt=''></a>
             </li>
             <li class='key'>
-                <p>GROUPCALENDARID</p>
+                <p>Group Code: {{ group_code }}</p>
             </li>
             {% for user in users %}
             <li class='avatar'>
-                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}" >{{ user.user.name }}</p>
+                <p><img src="{{ url_for('static', filename= 'images/contacts.png') }}" >{{ user.user.full_name }}</p>
             </li>
             {% endfor %}
             <li class='add'>
