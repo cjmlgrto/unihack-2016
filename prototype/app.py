@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
+
+global_users = {}
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
@@ -53,6 +56,7 @@ def check_username():
 @app.route('/new_user/')
 def new_user():
 	username = generate_code()
+	global_users[username] = []
 	user = User(username)
 	db.session.add(user)
 	db.session.commit()
@@ -62,7 +66,21 @@ def new_user():
 @app.route('/user/<username>')
 def user(username):
 	db_user = User.query.filter_by(name=username).first()
-	return render_template('user.html', user=db_user)
+
+	events = global_users[username]
+
+	return render_template('user.html', user=db_user, events=events)
+
+@app.route('/user/<username>/create_event/<start>/<end>')
+def create_event(username, start, end):
+	event = [start, end]
+
+	global_users[username].append(event)
+
+	url = '/user/' + username
+	return redirect(url)
+
+	
 
 @app.route('/new_group/<username>')
 def new_group(username):
