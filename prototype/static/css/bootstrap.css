@@ -12,7 +12,7 @@ body {
     height: 100%;
     position: fixed;
     left: 0;
-    background-color: rgba(30, 30, 30, 0.3);
+    background-image: url("../images/side.jpg");
     width: 20vw;
     z-index: 998;
     overflow-y: scroll;
@@ -28,6 +28,7 @@ body {
     padding: 0;
 }
 
+
 .avatar {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -40,7 +41,8 @@ body {
     cursor: pointer;
     cursor: hand;
 }
-
+.add{
+}
 .avatar img,
 .add img {
     width: 4vw;
@@ -67,7 +69,9 @@ body {
 }
 
 #main {
-    padding-left: 20vw;
+    margin: 0vw;
+    margin-left: 20vw;
+    padding: 0;
 }
 
 #logo-make {
@@ -77,11 +81,24 @@ body {
 }
 
 #logo-make img {
-    width: 10vw;
+    width: 12vw;
     padding-top: 1em;
     padding-bottom: 1em;
 }
-
+.add-box{
+    background-color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
+    width: 13vw;
+}
+.plus{
+    margin: 1vw;
+    color: rgba(255,255,255,0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0.3);
+    vertical-align: middle;
+}
 .key {
     text-align: center;
 }
@@ -96,9 +113,6 @@ body {
 }
 
 .calendar {
-    margin: 10vh;
-    margin-right: 15vw;
-    margin-left: 15vw;
 }
 
 .fc-scroller {

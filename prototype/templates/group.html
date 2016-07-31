@@ -30,15 +30,6 @@
                         click: function () {
                             $('#calendar1').fullCalendar('removeEvents');
                         }
-                    },
-                    overlayButton: {
-                        text: 'overlay',
-                        click: function () {
-                            $('#calendar2').css({
-                                'position': 'absolute',
-                                'top': '0.70em'
-                            });
-                        }
                     }
                 },
                 header: {
@@ -59,8 +50,9 @@
                     };
                     $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
                     $('#calendar1').fullCalendar('unselect');
-                    calendar.push(eventData); //append user's calendar list with latest event data
+                    calendar1.push(eventData); //append user's calendar list with latest event data
                     n++;
+                    console.log(eventData.start, eventData.end);
                 },
                 editable: false,
                 eventLimit: true, // allow "more" link when too many events
@@ -69,45 +61,6 @@
                 //Deletes events on click
                 eventClick: function (eventData, jsEvent, view) {
                     $('#calendar1').fullCalendar('removeEvents', function (events) {
-                        for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
-                            if (eventData.id == calendar[i].id) {
-                                calendar.splice(i, 1);
-                            };
-                        };
-                        return events == eventData;
-                    });
-                },
-            });
-
-            $('#calendar2').fullCalendar({
-                header: {
-                    left: '',
-                    center: '',
-                    right: ''
-                },
-                selectable: true,
-                selectHelper: true,
-
-                //Creates events on click/drag
-                select: function (start, end, id) {
-                    var eventData;
-                    eventData = {
-                        start: start, //start time
-                        end: end, //end time
-                        id: n //unique event id (order in which events are created starting on index 0)
-                    };
-                    $('#calendar2').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    $('#calendar2').fullCalendar('unselect');
-                    calendar.push(eventData); //append user's calendar list with latest event data
-                    n++;
-                },
-                editable: false,
-                eventLimit: true, // allow "more" link when too many events
-                events: [], //private variable to temporaily store event data
-
-                //Deletes events on click
-                eventClick: function (eventData, jsEvent, view) {
-                    $('#calendar2').fullCalendar('removeEvents', function (events) {
                         for (i = 0; i < calendar.length; i++) { //iterates through globa calendar list and removes events based on unique id's
                             if (eventData.id == calendar[i].id) {
                                 calendar.splice(i, 1);
@@ -126,7 +79,7 @@
         <!--<img id='sidebar-arrow' src='images/right-arrow-w.svg' alt=''>-->
         <ul id='sidebar-items'>
             <li id='logo-make'>
-                <img src="{{ url_for('static', filename= 'images/logo-b.svg') }}" alt=''>
+                <a href="/"><img src="{{ url_for('static', filename= 'images/logo-b.svg') }}" alt=''></a>
             </li>
             <li class='key'>
                 <p>GROUPCALENDARID</p>
@@ -138,8 +91,8 @@
             {% endfor %}
             <li class='add'>
                 <form action="/group/{{group_code}}/add_users" method="post">
-                    <input type="submit" class="ghost-button" value="add">
-                    <input type="text" name="username"> 
+                    <input type="submit" class="ghost-button plus" value="+">
+                    <input type="text" name="username" class="add-box"> 
                     </div>
                 </form>
             </li>

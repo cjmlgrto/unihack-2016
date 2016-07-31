@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+global_users = {}
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/user_database1.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -56,13 +58,25 @@ def new_user():
 	user = User(username)
 	db.session.add(user)
 	db.session.commit()
+	global_users[username] = []
+
 	url = '/user/' + username
 	return redirect(url)
 
 @app.route('/user/<username>')
 def user(username):
 	db_user = User.query.filter_by(name=username).first()
-	return render_template('user.html', user=db_user)
+
+	events = global_users[username]
+
+	return render_template('user.html', user=db_user, events=events)
+
+@app.route('/user/<username>/create_event/<start>/<end>')
+def create_event(username, start, end):
+	event = [start, end]
+	global_users[username].append(event)
+	url = '/user/' + username
+	return redirect(url)
 
 @app.route('/new_group/<username>')
 def new_group(username):
@@ -89,21 +103,6 @@ def add_user(group_code):
 	db.session.commit()
 	url = '/group/' + group_code
 	return redirect(url)
-
-# users = Group.query.filter_by(group_code=group_code).first()
-# 	user_ids = [i.User.id for i in users]
-# 	userid = User.query.filter_by(name=username).first()
-# 	url = '/group/' + group_code
-# 	if userid == None:
-# 		return redirect(url)
-# 	else:
-# 		if userid in user_ids:
-# 			return redirect(url)
-# 		else:
-# 			user = Group(group_code, userid)
-# 			db.session.add(user)
-# 			db.session.commit()
-# 			return redirect(url)
 
 if __name__ == '__main__':
 	db.create_all()
