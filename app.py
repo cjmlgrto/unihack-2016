@@ -12,11 +12,10 @@ def teardown_request(exception):
 	db.close()
 
 @app.route('/')
-@app.route('/login')
 def home():
 	return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/', methods=['POST'])
 def login():
 	username = request.form['username']
 	if username != '':
@@ -39,7 +38,6 @@ def user(username=None):
 		return 'user not found!'
 	else:
 		return render_template('index.html', error=True)
-
 
 if __name__ == '__main__':
 	app.run(debug=True)
