@@ -5,6 +5,7 @@ db = SqliteDatabase('users.db')
 class User(Model):
 	id = PrimaryKeyField()
 	username = CharField()
+	schedule = TextField(default='')
 
 	class Meta:
 		database = db

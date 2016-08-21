@@ -1,0 +1,5 @@
+<form action="/login" method="POST">
+	<input type="text" name="username" placeholder="username">
+	<input type="submit" value="GO">
+</form>
+{% if error %}Username must not be blank!{% endif %}

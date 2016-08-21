@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect
 from models import *
 
 app = Flask(__name__)
@@ -12,25 +12,33 @@ def teardown_request(exception):
 	db.close()
 
 @app.route('/')
+@app.route('/login')
 def home():
-	return 'Hello World'
+	return render_template('index.html')
 
-@app.route('/create')
-@app.route('/create/<username>')
-def create(username=None):
-	if username is None:
-		return 'Error'
-	else:
+@app.route('/login', methods=['POST'])
+def login():
+	username = request.form['username']
+	if username != '':
+		users = User.select()
+		for user in users:
+			if user.username == username:
+				return redirect('/' + username)
 		new_user = User.create(username=username)
-		return username + ' created!'
+		return redirect('/' + username)
+	else:
+		return render_template('index.html', error=True)
 
-@app.route('/users')
-def users():
-	users_list = User.select()
-	superstring = ''
-	for user in users_list:
-		superstring = superstring + str(user.username) + ', '
-	return superstring
+@app.route('/<username>')
+def user(username=None):
+	if username is not None:
+		users = User.select()
+		for user in users:
+			if user.username == username:
+				return render_template('user.html',username=user.username,schedule=user.schedule)
+		return 'user not found!'
+	else:
+		return render_template('index.html', error=True)
 
 
 if __name__ == '__main__':
